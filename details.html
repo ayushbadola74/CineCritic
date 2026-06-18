@@ -6,7 +6,7 @@
     <link rel="shortcut icon" type="x-icon" href="./images/movie logo.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineCritic – Discover, Review & Rate Movies</title>
+    <title>John Wick – CineCritic</title>
     <!-- GOOGLE FONTS -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap" rel="stylesheet">
@@ -49,7 +49,7 @@
     <!-- END NAV -->
 
     <!-- DETAILS CONTAINER -->
-    <div id="details-container" style="display: none;">
+    <div id="details-container">
         <div class="container">
             <!-- Breadcrumbs & Navigation Bar -->
             <div class="details-top-bar">
@@ -62,7 +62,7 @@
                     <span class="separator">/</span>
                     <a href="index.html">Movies</a>
                     <span class="separator">/</span>
-                    <span id="breadcrumb-title" class="active">Movie Title</span>
+                    <span id="breadcrumb-title" class="active">John Wick</span>
                 </div>
             </div>
 
@@ -71,12 +71,12 @@
                 <div class="details-hero-container">
                     <!-- Left: Large Poster -->
                     <div class="details-poster">
-                        <img id="movie-poster" src="" alt="">
+                        <img id="movie-poster" src="./images/John wick.jpg" alt="John Wick">
                     </div>
                     <!-- Right: Info -->
                     <div class="details-info">
                         <div class="details-title-row">
-                            <h1 id="movie-title" class="details-title">Movie Title</h1>
+                            <h1 id="movie-title" class="details-title">John Wick</h1>
                             <div class="details-score-badge">
                                 <i class='bx bxs-star'></i>
                                 <span id="score-badge-val">9.5/10</span>
@@ -87,7 +87,7 @@
                         <div class="details-meta-row">
                             <div class="details-meta-item">
                                 <i class='bx bx-calendar'></i>
-                                <span id="meta-year">2023</span>
+                                <span id="meta-year">2014</span>
                             </div>
                             <div class="details-meta-item">
                                 <i class='bx bx-time'></i>
@@ -99,32 +99,33 @@
                             </div>
                             <div class="details-meta-item">
                                 <i class='bx bx-user-voice'></i>
-                                <span id="meta-age">16+</span>
+                                <span id="meta-age">18+</span>
                             </div>
                             <div id="genre-tags" style="display: flex; gap: 8px;">
-                                <!-- Genre Tags Go Here -->
+                                <span class="details-meta-item badge-item"><span>Action</span></span>
+                                <span class="details-meta-item badge-item"><span>Thriller</span></span>
                             </div>
                         </div>
 
                         <!-- Synopsis -->
                         <p id="movie-synopsis" class="details-synopsis">
-                            Synopsis text here...
+                            An ex-hit-man comes out of retirement to track down the gangsters that killed his dog and took everything from him.
                         </p>
 
                         <!-- Action Buttons Row -->
                         <div class="details-actions">
-                            <button id="watch-trailer-btn" class="btn btn-primary">
+                            <a href="#" class="btn btn-primary">
                                 <i class='bx bx-play'></i>
                                 <span>Watch Trailer</span>
-                            </button>
-                            <button id="add-review-btn" class="btn btn-secondary">
+                            </a>
+                            <a href="#review-form-section" class="btn btn-secondary">
                                 <i class='bx bx-message-square-add'></i>
                                 <span>Add Review</span>
-                            </button>
-                            <button id="add-watchlist-btn" class="btn btn-secondary">
+                            </a>
+                            <a href="#" class="btn btn-secondary">
                                 <i class='bx bx-plus'></i>
                                 <span>Add to Watchlist</span>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -136,7 +137,26 @@
                     Cast
                 </div>
                 <div id="cast-list" class="cast-list">
-                    <!-- Dynamically Populated Circular Cast Cards -->
+                    <div class="cast-card">
+                        <div class="cast-avatar">KR</div>
+                        <div class="cast-name">Keanu Reeves</div>
+                    </div>
+                    <div class="cast-card">
+                        <div class="cast-avatar">MN</div>
+                        <div class="cast-name">Michael Nyqvist</div>
+                    </div>
+                    <div class="cast-card">
+                        <div class="cast-avatar">AA</div>
+                        <div class="cast-name">Alfie Allen</div>
+                    </div>
+                    <div class="cast-card">
+                        <div class="cast-avatar">AP</div>
+                        <div class="cast-name">Adrianne Palicki</div>
+                    </div>
+                    <div class="cast-card">
+                        <div class="cast-avatar">WD</div>
+                        <div class="cast-name">Willem Dafoe</div>
+                    </div>
                 </div>
             </div>
 
@@ -146,7 +166,138 @@
                     Related Movies
                 </div>
                 <div id="related-grid" class="related-grid">
-                    <!-- Dynamically Populated Clickable Related Movies -->
+                    <a href="details.html" class="movie-item">
+                        <img src="./images/series/supergirl.jpg" alt="Supergirl">
+                        <div class="movie-item-content">
+                            <div class="movie-item-title">Supergirl</div>
+                            <div class="movie-infos">
+                                <div class="movie-info">
+                                    <i class="bx bxs-star"></i>
+                                    <span>9.5</span>
+                                </div>
+                                <div class="movie-info">
+                                    <i class="bx bxs-time"></i>
+                                    <span>120 mins</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>HD</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>16+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="details.html" class="movie-item">
+                        <img src="./images/movies/transformer.jpg" alt="Transformers">
+                        <div class="movie-item-content">
+                            <div class="movie-item-title">Transformers</div>
+                            <div class="movie-infos">
+                                <div class="movie-info">
+                                    <i class="bx bxs-star"></i>
+                                    <span>9.5</span>
+                                </div>
+                                <div class="movie-info">
+                                    <i class="bx bxs-time"></i>
+                                    <span>120 mins</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>HD</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>16+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="details.html" class="movie-item">
+                        <img src="./images/movies/resident-evil.jpg" alt="Resident Evil">
+                        <div class="movie-item-content">
+                            <div class="movie-item-title">Resident Evil</div>
+                            <div class="movie-infos">
+                                <div class="movie-info">
+                                    <i class="bx bxs-star"></i>
+                                    <span>9.5</span>
+                                </div>
+                                <div class="movie-info">
+                                    <i class="bx bxs-time"></i>
+                                    <span>120 mins</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>HD</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>18+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="details.html" class="movie-item">
+                        <img src="./images/movies/captain-marvel.png" alt="Captain Marvel">
+                        <div class="movie-item-content">
+                            <div class="movie-item-title">Captain Marvel</div>
+                            <div class="movie-infos">
+                                <div class="movie-info">
+                                    <i class="bx bxs-star"></i>
+                                    <span>9.5</span>
+                                </div>
+                                <div class="movie-info">
+                                    <i class="bx bxs-time"></i>
+                                    <span>120 mins</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>HD</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>16+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="details.html" class="movie-item">
+                        <img src="./images/movies/hunter-killer.jpg" alt="Hunter Killer">
+                        <div class="movie-item-content">
+                            <div class="movie-item-title">Hunter Killer</div>
+                            <div class="movie-infos">
+                                <div class="movie-info">
+                                    <i class="bx bxs-star"></i>
+                                    <span>9.5</span>
+                                </div>
+                                <div class="movie-info">
+                                    <i class="bx bxs-time"></i>
+                                    <span>120 mins</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>HD</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>16+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="details.html" class="movie-item">
+                        <img src="./images/movies/blood-shot.jpg" alt="Bloodshot">
+                        <div class="movie-item-content">
+                            <div class="movie-item-title">Bloodshot</div>
+                            <div class="movie-infos">
+                                <div class="movie-info">
+                                    <i class="bx bxs-star"></i>
+                                    <span>9.5</span>
+                                </div>
+                                <div class="movie-info">
+                                    <i class="bx bxs-time"></i>
+                                    <span>120 mins</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>HD</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>16+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
 
@@ -160,24 +311,28 @@
                     <div class="reviews-summary-column">
                         <div class="community-rating-box">
                             <p style="font-weight: 600; margin-bottom: 5px; color: rgba(255, 255, 255, 0.7);">Community Rating</p>
-                            <div id="summary-rating-avg" class="community-rating-num">4.8</div>
+                            <div id="summary-rating-avg" class="community-rating-num">4.5<span>/5</span></div>
                             <div id="summary-stars" class="community-rating-stars">
-                                <!-- Star Icons -->
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star-half'></i>
                             </div>
-                            <div id="summary-rating-count" class="community-rating-count">12 reviews</div>
+                            <div id="summary-rating-count" class="community-rating-count">2 reviews</div>
                         </div>
 
                         <!-- Form -->
                         <div id="review-form-section" class="review-form-card">
                             <h3>Add a Review</h3>
-                            <form id="review-form">
+                            <form id="review-form" onsubmit="event.preventDefault(); return false;">
                                 <div class="form-group">
                                     <label for="review-name">Your Name</label>
                                     <input type="text" id="review-name" class="form-input" placeholder="e.g. John Doe" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Rating</label>
-                                    <div id="star-selector" class="star-rating-selector">
+                                    <div id="star-selector" class="star-rating-selector" style="cursor: default;">
                                         <i class='bx bxs-star active' data-rating="1"></i>
                                         <i class='bx bxs-star active' data-rating="2"></i>
                                         <i class='bx bxs-star active' data-rating="3"></i>
@@ -189,7 +344,7 @@
                                     <label for="review-text">Review</label>
                                     <textarea id="review-text" class="form-textarea" rows="5" placeholder="Write your review here..." required></textarea>
                                 </div>
-                                <button id="submit-review-btn" class="btn btn-primary" style="width: 100%;">Submit Review</button>
+                                <button type="submit" id="submit-review-btn" class="btn btn-primary" style="width: 100%;">Submit Review</button>
                             </form>
                         </div>
                     </div>
@@ -198,7 +353,34 @@
                     <div class="reviews-list-column">
                         <h3>User Reviews</h3>
                         <div id="reviews-list">
-                            <!-- Review Cards Go Here -->
+                            <div class="review-card">
+                                <div class="review-card-header">
+                                    <div class="review-card-user">ActionFanatic</div>
+                                    <div class="review-card-rating">
+                                        <i class='bx bxs-star'></i>
+                                        <i class='bx bxs-star'></i>
+                                        <i class='bx bxs-star'></i>
+                                        <i class='bx bxs-star'></i>
+                                        <i class='bx bxs-star'></i>
+                                    </div>
+                                </div>
+                                <div class="review-card-date">June 02, 2026</div>
+                                <div class="review-card-text">The gun-fu action sequences are unmatched. Keanu Reeves is the perfect John Wick.</div>
+                            </div>
+                            <div class="review-card">
+                                <div class="review-card-header">
+                                    <div class="review-card-user">PlotIsSimpleButGood</div>
+                                    <div class="review-card-rating">
+                                        <i class='bx bxs-star'></i>
+                                        <i class='bx bxs-star'></i>
+                                        <i class='bx bxs-star'></i>
+                                        <i class='bx bxs-star'></i>
+                                        <i class='bx bx-star'></i>
+                                    </div>
+                                </div>
+                                <div class="review-card-date">May 18, 2026</div>
+                                <div class="review-card-text">Simple premise executed to perfection. High speed action at its finest.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -206,31 +388,6 @@
         </div>
     </div>
     <!-- END DETAILS CONTAINER -->
-
-    <!-- NOT FOUND SCREEN -->
-    <div id="not-found-container" class="container" style="display: none;">
-        <div class="not-found-screen">
-            <i class='bx bx-ghost'></i>
-            <h1>Movie Not Found</h1>
-            <p>We couldn't find the movie details you were looking for. It might have been removed or the link is invalid.</p>
-            <a href="index.html" class="btn btn-primary">
-                <i class='bx bx-home-alt'></i>
-                <span>Return Home</span>
-            </a>
-        </div>
-    </div>
-    <!-- END NOT FOUND SCREEN -->
-
-    <!-- TRAILER MODAL -->
-    <div id="trailer-modal" class="trailer-modal">
-        <div class="trailer-modal-content">
-            <button id="trailer-modal-close" class="trailer-modal-close">
-                <i class='bx bx-x'></i>
-            </button>
-            <iframe id="trailer-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-    </div>
-    <!-- END TRAILER MODAL -->
 
     <!-- FOOTER SECTION -->
     <footer class="section">
@@ -318,9 +475,6 @@
         Copyright 2023 CineCritic
     </div>
     <!-- END COPYRIGHT SECTION -->
-
-    <!-- DETAILS SCRIPT (Vanilla JS) -->
-    <script src="details.js"></script>
 
 </body>
 

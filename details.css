@@ -1,5 +1,9 @@
 /* CineCritic Movie Details Page Styles */
 
+html {
+    scroll-behavior: smooth;
+}
+
 :root {
     --transition-speed: 0.3s;
     --glow-color: rgba(31, 131, 237, 0.15);
