@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CineCritic — Movie Details, Trailer, Cast & Reviews">
+  <title>CineCritic — Movie Details</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        🎬 Cine<span>Critic</span>
+      </a>
+
+      <div class="nav-menu">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="index.html#popular" class="nav-link">Movies</a></li>
+          <li><a href="index.html#trending" class="nav-link">Trending</a></li>
+          <li><a href="index.html#top-rated" class="nav-link">Top Rated</a></li>
+        </ul>
+
+        <a href="index.html#watchlist" class="watchlist-btn">
+          ❤️ Watchlist <span class="watchlist-badge" id="watchlistCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Movie Detail Content -->
+  <main id="movieDetailView">
+    <div style="text-align: center; padding: 5rem 0; color: var(--text-muted);">
+      Loading movie details...
+    </div>
+  </main>
+
+  <!-- Video Trailer Modal -->
+  <div class="modal-overlay" id="trailerModal">
+    <div class="modal-container">
+      <button class="modal-close-btn" id="closeTrailerBtn">✕</button>
+      <div class="video-aspect-wrapper">
+        <iframe id="trailerIframe" src="" title="Movie Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 <span>CineCritic</span>. Netflix-style Cinematic Experience.</p>
+    </div>
+  </footer>
+
+  <!-- App JavaScript Dependencies -->
+  <script src="js/data.js"></script>
+  <script src="js/movie.js"></script>
+</body>
+</html>

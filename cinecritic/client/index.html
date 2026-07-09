@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CineCritic — Netflix-style hub to discover trending movies, watch trailers, rate, and share reviews.">
+  <title>CineCritic — Discover, Rate & Review Movies</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        🎬 Cine<span>Critic</span>
+      </a>
+
+      <div class="nav-menu">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="#popular" class="nav-link">Movies</a></li>
+          <li><a href="#trending" class="nav-link">Trending</a></li>
+          <li><a href="#top-rated" class="nav-link">Top Rated</a></li>
+          <li><a href="#upcoming" class="nav-link">Upcoming</a></li>
+        </ul>
+
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search movies, genres..." autocomplete="off">
+        </div>
+
+        <a href="#watchlist" id="watchlistNavBtn" class="watchlist-btn">
+          ❤️ Watchlist <span class="watchlist-badge" id="watchlistCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Spotlight Banner -->
+  <section class="hero-spotlight" id="heroBanner">
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="hero-content" id="heroContent">
+        <div class="hero-tag">🔥 FEATURED SPOTLIGHT</div>
+        <h1 class="hero-title" id="heroTitle">The Odyssey</h1>
+        <div class="hero-meta">
+          <span class="meta-rating">★ <span id="heroRating">7.7</span></span>
+          <span id="heroYear">2026</span>
+          <span id="heroGenre">Action • Adventure • Fantasy</span>
+          <span id="heroRuntime">2h 45m</span>
+        </div>
+        <p class="hero-desc" id="heroDesc">
+          Odysseus, the legendary King of Ithaca, embarks on a long and perilous journey home following the Trojan War. Throughout his voyage, he is forced to confront the whims of gods, mythological monsters, and trials that stretch both his cunning and his humanity to the breaking point.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-watch-now" id="heroWatchTrailerBtn">
+            ▶ Watch Trailer
+          </button>
+          <a href="#" class="btn-more-info" id="heroMoreInfoBtn">
+            ℹ More Info
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="container">
+    
+    <!-- Category Filter Bar -->
+    <div class="filter-bar" id="genreFilterBar">
+      <button class="genre-pill active" data-genre="All">All Genres</button>
+      <button class="genre-pill" data-genre="Action">Action</button>
+      <button class="genre-pill" data-genre="Sci-Fi">Sci-Fi</button>
+      <button class="genre-pill" data-genre="Drama">Drama</button>
+      <button class="genre-pill" data-genre="Adventure">Adventure</button>
+      <button class="genre-pill" data-genre="Animation">Animation</button>
+      <button class="genre-pill" data-genre="Horror">Horror</button>
+      <button class="genre-pill" data-genre="Thriller">Thriller</button>
+      <button class="genre-pill" data-genre="Comedy">Comedy</button>
+      <button class="genre-pill" data-genre="Crime">Crime</button>
+    </div>
+
+    <!-- Search / Filter Results Header (Hidden by default unless searching) -->
+    <div id="searchResultsHeader" style="display: none; margin: 1.5rem 0 1rem;">
+      <h2 class="section-title" id="searchTitle">Search Results</h2>
+    </div>
+    <div class="carousel-row" id="searchResultsRow" style="display: none;"></div>
+
+    <!-- Section 1: Popular -->
+    <section id="popular" class="movie-section">
+      <div class="section-header">
+        <h2 class="section-title">Popular Movies</h2>
+        <div class="scroll-controls">
+          <button class="scroll-btn" onclick="scrollCarousel('popularRow', -400)">‹</button>
+          <button class="scroll-btn" onclick="scrollCarousel('popularRow', 400)">›</button>
+        </div>
+      </div>
+      <div class="carousel-row" id="popularRow"></div>
+    </section>
+
+    <!-- Section 2: Trending -->
+    <section id="trending" class="movie-section">
+      <div class="section-header">
+        <h2 class="section-title">Trending This Week</h2>
+        <div class="scroll-controls">
+          <button class="scroll-btn" onclick="scrollCarousel('trendingRow', -400)">‹</button>
+          <button class="scroll-btn" onclick="scrollCarousel('trendingRow', 400)">›</button>
+        </div>
+      </div>
+      <div class="carousel-row" id="trendingRow"></div>
+    </section>
+
+    <!-- Section 3: Top Rated -->
+    <section id="top-rated" class="movie-section">
+      <div class="section-header">
+        <h2 class="section-title">Top Rated</h2>
+        <div class="scroll-controls">
+          <button class="scroll-btn" onclick="scrollCarousel('topRatedRow', -400)">‹</button>
+          <button class="scroll-btn" onclick="scrollCarousel('topRatedRow', 400)">›</button>
+        </div>
+      </div>
+      <div class="carousel-row" id="topRatedRow"></div>
+    </section>
+
+    <!-- Section 4: Upcoming -->
+    <section id="upcoming" class="movie-section">
+      <div class="section-header">
+        <h2 class="section-title">Upcoming Releases</h2>
+        <div class="scroll-controls">
+          <button class="scroll-btn" onclick="scrollCarousel('upcomingRow', -400)">‹</button>
+          <button class="scroll-btn" onclick="scrollCarousel('upcomingRow', 400)">›</button>
+        </div>
+      </div>
+      <div class="carousel-row" id="upcomingRow"></div>
+    </section>
+
+    <!-- Section 5: Watchlist -->
+    <section id="watchlist" class="movie-section" style="display: none;">
+      <div class="section-header">
+        <h2 class="section-title">My Watchlist</h2>
+        <div class="scroll-controls">
+          <button class="scroll-btn" onclick="scrollCarousel('watchlistRow', -400)">‹</button>
+          <button class="scroll-btn" onclick="scrollCarousel('watchlistRow', 400)">›</button>
+        </div>
+      </div>
+      <div class="carousel-row" id="watchlistRow"></div>
+    </section>
+
+  </main>
+
+  <!-- Video Trailer Modal -->
+  <div class="modal-overlay" id="trailerModal">
+    <div class="modal-container">
+      <button class="modal-close-btn" id="closeTrailerBtn">✕</button>
+      <div class="video-aspect-wrapper">
+        <iframe id="trailerIframe" src="" title="Movie Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 <span>CineCritic</span>. Netflix-style Cinematic Experience.</p>
+    </div>
+  </footer>
+
+  <!-- App JavaScript Dependencies -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
