@@ -1,4 +1,4 @@
-// CineCritic Movie Detail Page Logic
+// CineCritic Movie Detail Page Logic - Live TMDB API Powered
 document.addEventListener('DOMContentLoaded', () => {
   console.log('🎬 Movie Details Page Initialized');
 
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // URL Query Parameter
   const urlParams = new URLSearchParams(window.location.search);
-  const movieId = parseInt(urlParams.get('id')) || 1368337;
+  const movieIdParam = urlParams.get('id') || '550';
 
   // LocalStorage Watchlist Helper
   function getWatchlist() {
@@ -19,8 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function toggleWatchlist(id) {
     let list = getWatchlist();
-    if (list.includes(id)) {
-      list = list.filter(item => item !== id);
+    const strId = String(id);
+    const numId = Number(id);
+
+    if (list.includes(id) || list.includes(strId) || list.includes(numId)) {
+      list = list.filter(item => String(item) !== strId && Number(item) !== numId);
     } else {
       list.push(id);
     }
@@ -39,19 +42,29 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadMovieDetails() {
     let movie = null;
     try {
-      const res = await fetch(`/api/movies/${movieId}`);
+      const res = await fetch(`/api/movies/${movieIdParam}`);
       if (res.ok) {
         movie = await res.json();
       }
     } catch (e) {
-      console.warn('API error, falling back to local dataset');
+      console.warn('API error, falling back to local dataset:', e);
     }
 
-    if (!movie) {
-      movie = MOVIES_DATABASE.find(m => m.id === movieId) || MOVIES_DATABASE[0];
+    if (!movie && typeof MOVIES_DATABASE !== 'undefined') {
+      const parsedId = parseInt(movieIdParam);
+      movie = MOVIES_DATABASE.find(m => m.id === parsedId || m.id === movieIdParam) || MOVIES_DATABASE[0];
     }
 
-    renderMovieView(movie);
+    if (movie) {
+      renderMovieView(movie);
+    } else if (movieDetailView) {
+      movieDetailView.innerHTML = `
+        <div class="container" style="padding: 5rem 0; text-align: center;">
+          <h2>Movie not found</h2>
+          <a href="index.html" class="back-link">← Back to Home</a>
+        </div>
+      `;
+    }
   }
 
   // Render Movie Detail View
@@ -59,8 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!movieDetailView) return;
 
     const watchlist = getWatchlist();
-    const isSaved = watchlist.includes(movie.id);
-    const genrePillsHTML = movie.genre.map(g => `<span class="pill">${g}</span>`).join('');
+    const isSaved = watchlist.includes(movie.id) || watchlist.includes(String(movie.id)) || watchlist.includes(Number(movie.id));
+    
+    const genres = Array.isArray(movie.genre) ? movie.genre : [movie.genre || 'Movie'];
+    const genrePillsHTML = genres.map(g => `<span class="pill">${g}</span>`).join('');
 
     // Cast Cards HTML
     const castHTML = (movie.cast || []).map(c => `
@@ -88,20 +103,27 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('')
       : `<div style="color: var(--text-muted); padding: 1rem 0;">Be the first to review "${movie.title}"!</div>`;
 
-    // Similar Movies HTML
-    const similarMovies = MOVIES_DATABASE.filter(m => m.id !== movie.id && m.genre.some(g => movie.genre.includes(g))).slice(0, 6);
-    const similarCardsHTML = similarMovies.map(m => `
-      <a href="movie.html?id=${m.id}" class="movie-card">
-        <div class="poster-wrapper">
-          <img class="movie-poster" src="${m.poster}" alt="${m.title}" loading="lazy">
-          <div class="movie-badge-rating">★ ${m.rating}</div>
-        </div>
-        <div class="movie-info">
-          <h3 class="movie-title">${m.title}</h3>
-          <div class="movie-submeta">${m.year} • ${m.genre[0]}</div>
-        </div>
-      </a>
-    `).join('');
+    // Similar Movies HTML (from TMDB recommended or local DB)
+    let similarMovies = movie.similar && movie.similar.length > 0 ? movie.similar : [];
+    if (similarMovies.length === 0 && typeof MOVIES_DATABASE !== 'undefined') {
+      similarMovies = MOVIES_DATABASE.filter(m => m.id !== movie.id).slice(0, 6);
+    }
+
+    const similarCardsHTML = similarMovies.slice(0, 6).map(m => {
+      const gTag = Array.isArray(m.genre) && m.genre.length > 0 ? m.genre[0] : (m.genre || 'Movie');
+      return `
+        <a href="movie.html?id=${m.id}" class="movie-card">
+          <div class="poster-wrapper">
+            <img class="movie-poster" src="${m.poster}" alt="${m.title}" loading="lazy">
+            <div class="movie-badge-rating">★ ${m.rating}</div>
+          </div>
+          <div class="movie-info">
+            <h3 class="movie-title">${m.title}</h3>
+            <div class="movie-submeta">${m.year} • ${gTag}</div>
+          </div>
+        </a>
+      `;
+    }).join('');
 
     movieDetailView.innerHTML = `
       <section class="detail-hero" style="background-image: url('${movie.backdrop || movie.poster}');">
@@ -178,12 +200,14 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <!-- Similar Movies Carousel -->
-        <div class="section-header">
-          <h2 class="section-title">Similar Movies You Might Like</h2>
-        </div>
-        <div class="carousel-row" style="margin-bottom: 4rem;">
-          ${similarCardsHTML}
-        </div>
+        ${similarCardsHTML ? `
+          <div class="section-header">
+            <h2 class="section-title">Recommended Movies</h2>
+          </div>
+          <div class="carousel-row" style="margin-bottom: 4rem;">
+            ${similarCardsHTML}
+          </div>
+        ` : ''}
       </section>
     `;
 
@@ -216,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
           currentLocal.unshift(newReview);
           localStorage.setItem(localReviewsKey, JSON.stringify(currentLocal));
 
-          // Post to server API if available
+          // Post to server API
           try {
             await fetch(`/api/movies/${movie.id}/reviews`, {
               method: 'POST',
@@ -236,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Modal Player Controls
   function openTrailerModal(url) {
     if (!trailerModal || !trailerIframe) return;
-    trailerIframe.src = url + "?autoplay=1";
+    trailerIframe.src = url + (url.includes('?') ? '&' : '?') + "autoplay=1";
     trailerModal.classList.add('open');
   }
 
