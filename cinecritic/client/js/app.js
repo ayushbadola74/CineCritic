@@ -1,8 +1,10 @@
-// CineCritic Main App Logic - TMDB API Driven
+// CineCritic Main App Logic - Independent TMDB API Endpoints
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🎬 CineCritic App initialized with TMDB API');
+  console.log('🎬 CineCritic App loaded with independent TMDB section endpoints');
 
-  // LocalStorage Watchlist Helper
+  const API_BASE_URL = 'http://localhost:5000/api/movies';
+
+  // Watchlist LocalStorage Helpers
   function getWatchlist() {
     return JSON.parse(localStorage.getItem('cinecritic_watchlist') || '[]');
   }
@@ -29,11 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     setWatchlist(list);
 
-    // Re-render visible movie rows to update toggle heart icons
+    // Refresh rows so heart icon updates
     loadPopularMovies();
-    loadUpcomingMovies();
     loadTrendingMovies();
     loadTopRatedMovies();
+    loadUpcomingMovies();
   }
 
   function updateWatchlistCount() {
@@ -43,9 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Card Generator Component
+  // Universal Movie Card Renderer
   function createMovieCard(movie) {
-    // Construct TMDB poster URL according to requirements: https://image.tmdb.org/t/p/w500 + poster_path
+    // Poster: https://image.tmdb.org/t/p/w500 + poster_path
     let posterUrl = '';
     if (movie.poster_path) {
       posterUrl = movie.poster_path.startsWith('http') 
@@ -57,18 +59,24 @@ document.addEventListener('DOMContentLoaded', () => {
       posterUrl = 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80';
     }
 
-    // Extract rating (vote_average)
-    const rating = movie.vote_average !== undefined 
-      ? (typeof movie.vote_average === 'number' ? movie.vote_average.toFixed(1) : movie.vote_average) 
-      : (movie.rating || 'N/A');
+    // Title
+    const title = movie.title || movie.original_title || 'Untitled';
 
-    const watchlist = getWatchlist();
-    const isSaved = watchlist.includes(movie.id) || watchlist.includes(String(movie.id)) || watchlist.includes(Number(movie.id));
+    // Rating (vote_average)
+    let rating = 'N/A';
+    if (movie.vote_average !== undefined && movie.vote_average !== null) {
+      rating = typeof movie.vote_average === 'number' ? movie.vote_average.toFixed(1) : movie.vote_average;
+    } else if (movie.rating) {
+      rating = movie.rating;
+    }
 
     const year = movie.year || (movie.release_date ? movie.release_date.split('-')[0] : '');
     const genreTag = Array.isArray(movie.genre) && movie.genre.length > 0 
       ? movie.genre[0] 
       : (typeof movie.genre === 'string' ? movie.genre : '');
+
+    const watchlist = getWatchlist();
+    const isSaved = watchlist.includes(movie.id) || watchlist.includes(String(movie.id)) || watchlist.includes(Number(movie.id));
 
     const card = document.createElement('a');
     card.href = `movie.html?id=${movie.id}`;
@@ -76,14 +84,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     card.innerHTML = `
       <div class="poster-wrapper">
-        <img class="movie-poster" src="${posterUrl}" alt="${movie.title || 'Movie'}" loading="lazy">
+        <img class="movie-poster" src="${posterUrl}" alt="${title}" loading="lazy">
         <div class="movie-badge-rating">★ ${rating}</div>
         <button class="watchlist-toggle-btn ${isSaved ? 'active' : ''}" title="${isSaved ? 'Remove from Watchlist' : 'Add to Watchlist'}">
           ${isSaved ? '❤️' : '🤍'}
         </button>
       </div>
       <div class="movie-info">
-        <h3 class="movie-title">${movie.title || 'Untitled'}</h3>
+        <h3 class="movie-title">${title}</h3>
         <div class="movie-submeta">
           ${year ? `<span>${year}</span>` : ''}
           ${genreTag ? `<span>• ${genreTag}</span>` : ''}
@@ -99,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return card;
   }
 
-  // 1. Fetch Popular Movies
+  // 1. Popular Movies: GET /api/movies/popular
   async function loadPopularMovies() {
     const container = document.getElementById('popularRow');
     if (!container) return;
@@ -107,13 +115,13 @@ document.addEventListener('DOMContentLoaded', () => {
     container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); font-size: 1.1rem; width: 100%;">Loading...</div>';
 
     try {
-      const response = await fetch('http://localhost:5000/api/movies/popular');
+      const response = await fetch(`${API_BASE_URL}/popular`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const movies = await response.json();
 
       container.innerHTML = '';
       if (!movies || movies.length === 0) {
-        container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); width: 100%;">No movies found</div>';
+        container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); width: 100%;">No popular movies found</div>';
         return;
       }
 
@@ -121,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(createMovieCard(movie));
       });
 
-      // Optionally set Hero Spotlight using top popular movie
       if (movies[0]) setupHeroSpotlight(movies[0]);
 
     } catch (error) {
@@ -130,47 +137,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 2. Fetch Upcoming Movies
-  async function loadUpcomingMovies() {
-    const container = document.getElementById('upcomingRow');
-    if (!container) return;
-
-    container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); font-size: 1.1rem; width: 100%;">Loading...</div>';
-
-    try {
-      const response = await fetch('http://localhost:5000/api/movies/upcoming');
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const movies = await response.json();
-
-      container.innerHTML = '';
-      if (!movies || movies.length === 0) {
-        container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); width: 100%;">No movies found</div>';
-        return;
-      }
-
-      movies.forEach(movie => {
-        container.appendChild(createMovieCard(movie));
-      });
-    } catch (error) {
-      console.error('Failed to load upcoming movies:', error);
-      container.innerHTML = '<div style="padding: 2rem; color: #ef4444; font-size: 1.1rem; width: 100%;">Failed to load movies</div>';
-    }
-  }
-
-  // Additional Sections (Trending & Top Rated)
+  // 2. Trending Movies: GET /api/movies/trending
   async function loadTrendingMovies() {
     const container = document.getElementById('trendingRow');
     if (!container) return;
+
     container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); font-size: 1.1rem; width: 100%;">Loading...</div>';
 
     try {
-      const response = await fetch('http://localhost:5000/api/movies/trending');
+      const response = await fetch(`${API_BASE_URL}/trending`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const movies = await response.json();
 
       container.innerHTML = '';
       if (!movies || movies.length === 0) {
-        container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); width: 100%;">No movies found</div>';
+        container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); width: 100%;">No trending movies found</div>';
         return;
       }
 
@@ -183,19 +164,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // 3. Top Rated Movies: GET /api/movies/top-rated
   async function loadTopRatedMovies() {
     const container = document.getElementById('topRatedRow');
     if (!container) return;
+
     container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); font-size: 1.1rem; width: 100%;">Loading...</div>';
 
     try {
-      const response = await fetch('http://localhost:5000/api/movies/top-rated');
+      const response = await fetch(`${API_BASE_URL}/top-rated`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const movies = await response.json();
 
       container.innerHTML = '';
       if (!movies || movies.length === 0) {
-        container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); width: 100%;">No movies found</div>';
+        container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); width: 100%;">No top rated movies found</div>';
         return;
       }
 
@@ -203,12 +186,39 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(createMovieCard(movie));
       });
     } catch (error) {
-      console.error('Failed to load top-rated movies:', error);
+      console.error('Failed to load top rated movies:', error);
       container.innerHTML = '<div style="padding: 2rem; color: #ef4444; font-size: 1.1rem; width: 100%;">Failed to load movies</div>';
     }
   }
 
-  // Watchlist Loader
+  // 4. Upcoming Movies: GET /api/movies/upcoming
+  async function loadUpcomingMovies() {
+    const container = document.getElementById('upcomingRow');
+    if (!container) return;
+
+    container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); font-size: 1.1rem; width: 100%;">Loading...</div>';
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/upcoming`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const movies = await response.json();
+
+      container.innerHTML = '';
+      if (!movies || movies.length === 0) {
+        container.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); width: 100%;">No upcoming movies found</div>';
+        return;
+      }
+
+      movies.forEach(movie => {
+        container.appendChild(createMovieCard(movie));
+      });
+    } catch (error) {
+      console.error('Failed to load upcoming movies:', error);
+      container.innerHTML = '<div style="padding: 2rem; color: #ef4444; font-size: 1.1rem; width: 100%;">Failed to load movies</div>';
+    }
+  }
+
+  // Watchlist Section Loader
   async function loadWatchlistMovies() {
     const watchlistSection = document.getElementById('watchlist');
     const watchlistRow = document.getElementById('watchlistRow');
@@ -227,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const fetchedMovies = await Promise.all(
         list.map(async (id) => {
           try {
-            const res = await fetch(`http://localhost:5000/api/movies/${id}`);
+            const res = await fetch(`${API_BASE_URL}/${id}`);
             if (res.ok) return await res.json();
           } catch (e) { }
           return null;
@@ -248,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Hero Spotlight Setup
+  // Setup Spotlight Hero
   function setupHeroSpotlight(movie) {
     if (!movie) return;
     const heroBanner = document.getElementById('heroBanner');
@@ -261,11 +271,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroMoreInfoBtn = document.getElementById('heroMoreInfoBtn');
     const heroWatchTrailerBtn = document.getElementById('heroWatchTrailerBtn');
 
-    if (heroBanner && movie.backdrop) heroBanner.style.backgroundImage = `url('${movie.backdrop}')`;
-    if (heroTitle) heroTitle.textContent = movie.title;
+    const backdropUrl = movie.backdrop_path ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}` : (movie.backdrop || movie.poster);
+    if (heroBanner && backdropUrl) heroBanner.style.backgroundImage = `url('${backdropUrl}')`;
+    if (heroTitle) heroTitle.textContent = movie.title || movie.original_title;
     if (heroRating) heroRating.textContent = movie.vote_average !== undefined ? movie.vote_average : movie.rating;
     if (heroYear) heroYear.textContent = movie.year || (movie.release_date ? movie.release_date.split('-')[0] : '');
-    if (heroGenre) heroGenre.textContent = Array.isArray(movie.genre) ? movie.genre.join(' • ') : movie.genre;
+    if (heroGenre) heroGenre.textContent = Array.isArray(movie.genre) ? movie.genre.join(' • ') : (movie.genre || 'Action • Movie');
     if (heroRuntime) heroRuntime.textContent = movie.runtime || '2h 15m';
     if (heroDesc) heroDesc.textContent = movie.overview;
     if (heroMoreInfoBtn) heroMoreInfoBtn.href = `movie.html?id=${movie.id}`;
@@ -295,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
       searchDebounceTimeout = setTimeout(async () => {
         try {
           if (searchResultsRow) searchResultsRow.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); width: 100%;">Loading...</div>';
-          const res = await fetch(`http://localhost:5000/api/movies?search=${encodeURIComponent(query)}`);
+          const res = await fetch(`${API_BASE_URL}?search=${encodeURIComponent(query)}`);
           if (res.ok) {
             const results = await res.json();
             if (searchResultsHeader) searchResultsHeader.style.display = 'block';
@@ -334,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         try {
           if (searchResultsRow) searchResultsRow.innerHTML = '<div style="padding: 2rem; color: var(--text-muted, #94a3b8); width: 100%;">Loading...</div>';
-          const res = await fetch(`http://localhost:5000/api/movies?genre=${encodeURIComponent(selectedGenre)}`);
+          const res = await fetch(`${API_BASE_URL}?genre=${encodeURIComponent(selectedGenre)}`);
           if (res.ok) {
             const filtered = await res.json();
             if (searchResultsHeader) searchResultsHeader.style.display = 'block';
@@ -388,11 +399,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // On Page Load: Execute both required fetch functions
+  // ON PAGE LOAD: Execute all 4 independent fetch functions
   updateWatchlistCount();
   loadPopularMovies();
-  loadUpcomingMovies();
   loadTrendingMovies();
   loadTopRatedMovies();
+  loadUpcomingMovies();
   loadWatchlistMovies();
 });
