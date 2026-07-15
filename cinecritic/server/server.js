@@ -13,7 +13,7 @@ const Favorite = require('./models/Favorite');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-const TMDB_API_KEY = process.env.TMDB_API_KEY || 'd8a30baaabc6ed9ab7c42a6efab19039';
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/cinecritic';
 
 // 1. SETUP EXPRESS SERVER & MIDDLEWARE
