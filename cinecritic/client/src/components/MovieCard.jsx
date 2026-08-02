@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Star, Heart } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
+const FALLBACK_POSTER = 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80';
+
 const MovieCard = ({ movie }) => {
   const { isFavorite, toggleFavorite } = useAuth();
   const movieId = movie.id || movie.movieId;
@@ -14,9 +16,9 @@ const MovieCard = ({ movie }) => {
     toggleFavorite(movie);
   };
 
-  const posterSrc = movie.poster || (movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80');
-  const ratingVal = movie.rating || (movie.vote_average ? movie.vote_average.toFixed(1) : '7.5');
-  const releaseYear = movie.year || (movie.release_date ? movie.release_date.split('-')[0] : '2026');
+  const posterSrc = movie.poster || movie.backdrop || FALLBACK_POSTER;
+  const ratingVal = movie.rating !== undefined ? movie.rating : 7.5;
+  const releaseYear = movie.year || '2026';
 
   return (
     <Link to={`/movie/${movieId}`} className="movie-card">
@@ -26,6 +28,10 @@ const MovieCard = ({ movie }) => {
           alt={movie.title}
           className="movie-poster"
           loading="lazy"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = FALLBACK_POSTER;
+          }}
         />
 
         <div className="movie-badge-rating">

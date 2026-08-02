@@ -7,7 +7,7 @@
 ![Express](https://img.shields.io/badge/Framework-Express-black)
 ![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248)
 
-A full-stack **Movie Review & Rating Platform** where users can explore movies, view details, and manage reviews using a custom backend and TMDB API.
+A full-stack **Movie Review & Rating Platform** where users can explore movies, view details, and manage reviews using a custom backend and Watchmode API.
 
 ---
 
@@ -32,7 +32,7 @@ A full-stack **Movie Review & Rating Platform** where users can explore movies, 
 - Browse trending movies  
 - View detailed movie pages  
 - Add reviews and favorites  
-- Fetch movie data using TMDB API  
+- Fetch movie data using Watchmode API  
 
 The project is built using a **simple frontend (HTML, CSS, JS)** and a **Node.js + Express backend with MongoDB**.
 
@@ -40,7 +40,7 @@ The project is built using a **simple frontend (HTML, CSS, JS)** and a **Node.js
 
 ## ✨ Features
 
-- 🎬 Browse movies from TMDB API  
+- 🎬 Browse movies from Watchmode API  
 - 📄 Movie detail page  
 - ⭐ Add reviews  
 - ❤️ Add to favorites  
@@ -65,7 +65,7 @@ The project is built using a **simple frontend (HTML, CSS, JS)** and a **Node.js
 - MongoDB  
 
 ### API
-- TMDB (The Movie Database API)
+- Watchmode API
 
 ---
 

@@ -78,8 +78,8 @@ export const AuthProvider = ({ children }) => {
         const moviePayload = {
           movieId,
           title: movie.title,
-          poster: movie.poster || movie.poster_path,
-          rating: movie.rating || movie.vote_average || 0,
+          poster: movie.poster || movie.backdrop || '',
+          rating: movie.rating || 0,
           year: movie.year || ''
         };
         const { data } = await addFavorite(moviePayload);

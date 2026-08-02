@@ -83,9 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     searchDropdown.innerHTML = '';
     results.slice(0, 7).forEach(movie => {
-      const poster = movie.poster_path 
-        ? (movie.poster_path.startsWith('http') ? movie.poster_path : `https://image.tmdb.org/t/p/w185${movie.poster_path}`)
-        : (movie.poster || 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=200&q=80');
+      const poster = movie.poster || movie.posterLarge || 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=200&q=80';
 
       const rating = movie.vote_average !== undefined ? movie.vote_average : (movie.rating || 'N/A');
       const year = movie.year || (movie.release_date ? movie.release_date.split('-')[0] : '');

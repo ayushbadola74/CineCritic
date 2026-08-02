@@ -93,7 +93,7 @@ if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`=========================================`);
     console.log(`🎬 CineCritic Server running on port ${PORT}`);
-    console.log(`🔑 TMDB API Key Active: ${process.env.TMDB_API_KEY ? 'Yes' : 'No'}`);
+    console.log(`🔑 Watchmode API Key Active: ${process.env.WATCHMODE_API_KEY ? 'Yes' : 'No'}`);
     console.log(`🌐 API Base URL: http://localhost:${PORT}/api`);
     console.log(`=========================================`);
   });

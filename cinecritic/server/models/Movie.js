@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const movieSchema = new mongoose.Schema({
-  tmdbId: {
+  watchmodeId: {
     type: Number,
     required: true,
     unique: true

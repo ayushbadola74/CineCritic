@@ -5,7 +5,9 @@ import { Play, Info, Star } from 'lucide-react';
 const HeroBanner = ({ movie, onWatchTrailer }) => {
   if (!movie) return null;
 
-  const backdropUrl = movie.backdrop || (movie.backdrop_path ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}` : 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1400&q=80');
+  const backdropUrl = movie.backdrop || movie.poster || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1400&q=80';
+  const ratingVal = movie.rating || 7.5;
+  const yearVal = movie.year || '2026';
 
   return (
     <section
@@ -20,9 +22,9 @@ const HeroBanner = ({ movie, onWatchTrailer }) => {
           <div className="hero-meta">
             <span className="meta-rating">
               <Star size={16} fill="#ffb400" color="#ffb400" />
-              <span>{movie.rating || movie.vote_average?.toFixed(1) || '8.2'}</span>
+              <span>{ratingVal}</span>
             </span>
-            <span>{movie.year || '2026'}</span>
+            <span>{yearVal}</span>
             <span>Action • Sci-Fi • Adventure</span>
           </div>
           <p className="hero-desc">{movie.overview}</p>
