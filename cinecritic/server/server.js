@@ -21,21 +21,50 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-// API Health Check
-app.get('/api/status', (req, res) => {
+// API Root Information & Health Check
+const apiOverview = (req, res) => {
   res.json({
     status: 'ok',
     app: 'CineCritic API (MERN Stack)',
+    endpoints: {
+      status: '/api/status',
+      auth: ['POST /api/auth/signup', 'POST /api/auth/login', 'GET /api/auth/me'],
+      movies: [
+        'GET /api/movies',
+        'GET /api/movies/popular',
+        'GET /api/movies/trending',
+        'GET /api/movies/top-rated',
+        'GET /api/movies/upcoming',
+        'GET /api/movies/search?search=query',
+        'GET /api/movies/:id'
+      ],
+      reviews: [
+        'POST /api/reviews',
+        'GET /api/reviews/:movieId',
+        'GET /api/reviews/user/:userId'
+      ],
+      favorites: [
+        'POST /api/favorites',
+        'GET /api/favorites',
+        'DELETE /api/favorites/:movieId'
+      ]
+    },
     uptime: process.uptime(),
     timestamp: new Date()
   });
-});
+};
 
-// API Routes
+app.get('/api', apiOverview);
+app.get('/api/status', apiOverview);
+
+// API Routes (Supporting both plural and singular path aliases)
 app.use('/api/auth', authRoutes);
 app.use('/api/movies', movieRoutes);
+app.use('/api/movie', movieRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/review', reviewRoutes);
 app.use('/api/favorites', favoriteRoutes);
+app.use('/api/favorite', favoriteRoutes);
 
 // Serve frontend static build in production if available
 const clientBuildPath = path.join(__dirname, '../client/dist');
@@ -43,7 +72,11 @@ app.use(express.static(clientBuildPath));
 
 app.get('*', (req, res) => {
   if (req.originalUrl.startsWith('/api')) {
-    return res.status(404).json({ error: 'API route not found' });
+    return res.status(404).json({
+      error: 'API route not found',
+      requestedPath: req.originalUrl,
+      hint: 'Visit http://localhost:5000/api to see all supported endpoints.'
+    });
   }
   res.sendFile(path.join(clientBuildPath, 'index.html'), (err) => {
     if (err) {
@@ -61,7 +94,7 @@ if (require.main === module) {
     console.log(`=========================================`);
     console.log(`🎬 CineCritic Server running on port ${PORT}`);
     console.log(`🔑 TMDB API Key Active: ${process.env.TMDB_API_KEY ? 'Yes' : 'No'}`);
-    console.log(`🌐 API Server URL: http://localhost:${PORT}/`);
+    console.log(`🌐 API Base URL: http://localhost:${PORT}/api`);
     console.log(`=========================================`);
   });
 }
