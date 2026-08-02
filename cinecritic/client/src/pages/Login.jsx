@@ -54,7 +54,7 @@ const Login = () => {
       <div className="auth-card">
         <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.8rem', fontFamily: 'var(--font-heading)', fontWeight: 800 }}>
-            🎬 Cine<span style={{ color: 'var(--primary)' }}>Critic</span>
+            <Clapperboard size={28} color="#e50914" /> Cine<span style={{ color: 'var(--primary)' }}>Critic</span>
           </div>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.3rem' }}>
             {isLogin ? 'Welcome back! Sign in to access your Watchlist & Reviews.' : 'Create an account to rate and review movies.'}

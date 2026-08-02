@@ -21,7 +21,7 @@ const Navbar = ({ searchInput, setSearchInput }) => {
       <div className="container nav-container">
         <Link to="/" className="brand-logo">
           <Clapperboard size={28} color="#e50914" />
-          🎬 Cine<span>Critic</span>
+          Cine<span>Critic</span>
         </Link>
 
         <div className="nav-menu">
