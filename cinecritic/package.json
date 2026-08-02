@@ -1,0 +1,15 @@
+{
+  "name": "cinecritic-root",
+  "version": "1.0.0",
+  "description": "Full MERN Stack Application for CineCritic Movie Review Platform",
+  "scripts": {
+    "start": "npm run start --prefix server",
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

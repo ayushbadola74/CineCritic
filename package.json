@@ -1,0 +1,9 @@
+{
+  "name": "movie-website-root",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm run dev --prefix cinecritic",
+    "server": "npm run server --prefix cinecritic",
+    "client": "npm run client --prefix cinecritic"
+  }
+}
