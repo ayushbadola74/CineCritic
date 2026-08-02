@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: cinecritic-api
+    env: node
+    buildCommand: cd cinecritic/server && npm install
+    startCommand: cd cinecritic/server && npm start
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: MONGO_URI
+        value: mongodb://127.0.0.1:27017/cinecritic
+      - key: JWT_SECRET
+        value: cinecritic_jwt_secret_key_2026
+      - key: TMDB_API_KEY
+        value: d8a30baaabc6ed9ab7c42a6efab19039
+
+  - type: web
+    name: cinecritic-web
+    env: static
+    buildCommand: cd cinecritic/client && npm install && npm run build
+    staticPublishPath: cinecritic/client/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
