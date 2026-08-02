@@ -1,9 +1,19 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+// Format API Base URL cleanly
+const getBaseURL = () => {
+  let envUrl = import.meta.env.VITE_API_URL || '/api';
+  if (envUrl.startsWith('http')) {
+    envUrl = envUrl.replace(/\/$/, '');
+    if (!envUrl.endsWith('/api')) {
+      envUrl += '/api';
+    }
+  }
+  return envUrl;
+};
 
 const API = axios.create({
-  baseURL: API_BASE_URL
+  baseURL: getBaseURL()
 });
 
 // Attach Authorization header if token exists
